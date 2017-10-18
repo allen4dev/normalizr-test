@@ -11,6 +11,14 @@ const api = {
 
         return posts;
       },
+
+      async getSingle(id) {
+        const url = `${jplaceholderBaseURL}/posts/${id}`;
+        const response = await fetch(url);
+        const post = await response.json();
+
+        return post;
+      },
     },
   },
 };

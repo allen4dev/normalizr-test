@@ -8,11 +8,6 @@ class JSONPlaceholder extends Component {
     this.state = {};
   }
 
-  async componentDidMount() {
-    const posts = await api.jplaceholder.posts.getPosts();
-    console.log('POSTS', posts);
-  }
-
   render() {
     return (
       <div className="JSONPlaceholder container">

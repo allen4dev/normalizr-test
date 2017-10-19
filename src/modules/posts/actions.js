@@ -17,6 +17,20 @@ export function setPost(post) {
   };
 }
 
+export function setPostIDS(ids) {
+  return {
+    type: actionTypes.SET_POST_IDS,
+    payload: ids,
+  };
+}
+
+export function setPostID(id) {
+  return {
+    type: actionTypes.SET_POST_ID,
+    payload: id,
+  };
+}
+
 // Async actions
 export function fetchPosts(page = 1) {
   return async dispatch => {
@@ -30,6 +44,9 @@ export function fetchPosts(page = 1) {
     }, {});
 
     dispatch(setPosts(posts));
+    dispatch(setPostIDS(Object.keys(posts)));
+
+    return posts;
   };
 }
 
@@ -38,6 +55,7 @@ export function fetchPost(id) {
     const post = await api.jplaceholder.posts.getSingle(id);
 
     dispatch(setPost(post));
+    dispatch(setPostID(post.id));
 
     return post;
   };

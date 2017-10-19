@@ -43,6 +43,7 @@ class JSONPlaceholder extends Component {
     if (this.state.loading) {
       return <h1>Loading...</h1>;
     }
+
     return (
       <div className="JPlaceholder container">
         <h1 className="title">Posts</h1>

@@ -3,17 +3,17 @@ import * as actionTypes from './actionTypes';
 import api from './../../utils/api';
 
 // Action creators
-export function setUsers(users) {
+export function setUsers(filter, users) {
   return {
     type: actionTypes.SET_USERS,
-    payload: users,
+    payload: { filter, users },
   };
 }
 
-export function setUser(user) {
+export function setUser(filter, user) {
   return {
     type: actionTypes.SET_USER,
-    payload: user,
+    payload: { filter, user },
   };
 }
 
@@ -22,7 +22,7 @@ export function fetchSingle(id) {
   return async dispatch => {
     const response = await api.soundcloud.users.getSingle(id);
 
-    dispatch(setUser(response));
+    dispatch(setUser('soundcloud', response));
 
     return response;
   };
@@ -38,7 +38,7 @@ export function fetchUsers() {
       };
     }, {});
 
-    dispatch(setUsers(users));
+    dispatch(setUsers('jsonplaceholder', users));
 
     return users;
   };
@@ -55,7 +55,7 @@ export function searchUsers(term) {
       };
     }, {});
 
-    dispatch(setUsers(users));
+    dispatch(setUsers('soundcloud', users));
 
     return users;
   };

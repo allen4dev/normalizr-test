@@ -1,4 +1,7 @@
+import { normalize } from 'normalizr';
+
 import * as actionTypes from './actionTypes';
+import * as schemas from './schemas';
 
 import api from './../../utils/api';
 
@@ -36,15 +39,10 @@ export function fetchPosts(page = 1) {
   return async dispatch => {
     const response = await api.jplaceholder.posts.getPosts(page);
 
-    const posts = response.reduce((obj, post) => {
-      return {
-        ...obj,
-        [post.id]: post,
-      };
-    }, {});
+    const posts = normalize(response, schemas.postListSchema);
 
-    dispatch(setPosts(posts));
-    dispatch(setPostIDS(Object.keys(posts)));
+    dispatch(setPosts(posts.entities.posts));
+    dispatch(setPostIDS(posts.result));
 
     return posts;
   };
@@ -52,10 +50,11 @@ export function fetchPosts(page = 1) {
 
 export function fetchPost(id) {
   return async dispatch => {
-    const post = await api.jplaceholder.posts.getSingle(id);
+    const response = await api.jplaceholder.posts.getSingle(id);
+    const post = normalize(response, schemas.postSchema);
 
-    dispatch(setPost(post));
-    dispatch(setPostID(post.id));
+    dispatch(setPost(post.entities.posts));
+    dispatch(setPostID(post.result));
 
     return post;
   };

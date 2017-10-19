@@ -10,15 +10,10 @@ const INITIAL_STATE = {
 function entitiesReducer(state = INITIAL_STATE.entities, action = {}) {
   switch (action.type) {
     case actionTypes.SET_POSTS:
-      return {
-        ...state,
-        ...action.payload,
-      };
-
     case actionTypes.SET_POST:
       return {
         ...state,
-        [action.payload.id]: action.payload,
+        ...action.payload,
       };
 
     default:

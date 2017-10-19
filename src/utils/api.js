@@ -49,7 +49,7 @@ const api = {
       },
 
       async searchUsers(term) {
-        const url = `${soundcloudBaseURL}/users?q=${term}&client_id=${config
+        const url = `${soundcloudBaseURL}/users?q=${term}&limit=5&client_id=${config
           .soundcloud.CLIENT_ID}`;
 
         const response = await fetch(url);

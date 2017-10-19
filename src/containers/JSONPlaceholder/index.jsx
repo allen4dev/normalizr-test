@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
+
+import users from './../../modules/users';
 
 class JSONPlaceholder extends Component {
   constructor(props) {
@@ -25,4 +27,8 @@ class JSONPlaceholder extends Component {
   }
 }
 
-export default JSONPlaceholder;
+export default connect(null, {
+  fetchSingle: users.actions.fetchSingle,
+  fetchUsers: users.actions.fetchUsers,
+  searchUsers: users.actions.searchUsers,
+})(JSONPlaceholder);

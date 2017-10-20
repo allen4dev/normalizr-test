@@ -12,9 +12,6 @@ const Navigation = () => {
       <Link className="Navigation-link" to="/soundcloud">
         Soundcloud
       </Link>
-      <Link className="Navigation-link" to="/youtube">
-        Youtube
-      </Link>
     </nav>
   );
 };

@@ -1,62 +1,56 @@
+import { normalize } from 'normalizr';
+
 import * as actionTypes from './actionTypes';
+import * as schemas from './schemas';
 
 import api from './../../utils/api';
 
 // Action creators
-export function setUsers(filter, users) {
+export function setUsers(filter, response) {
   return {
     type: actionTypes.SET_USERS,
-    payload: { filter, users },
+    payload: { filter, response },
   };
 }
 
-export function setUser(filter, user) {
+export function setUser(filter, response) {
   return {
     type: actionTypes.SET_USER,
-    payload: { filter, user },
+    payload: { filter, response },
   };
 }
 
 // Async actions
 export function fetchSingle(id) {
   return async dispatch => {
-    const response = await api.soundcloud.users.getSingle(id);
+    const result = await api.soundcloud.users.getSingle(id);
+    const response = normalize(result, schemas.userSchema);
 
     dispatch(setUser('soundcloud', response));
 
-    return response;
+    return response.entities.users;
   };
 }
 
 export function fetchUsers() {
   return async dispatch => {
-    const response = await api.jplaceholder.users.getUsers();
-    const users = response.reduce((obj, user) => {
-      return {
-        ...obj,
-        [user.id]: user,
-      };
-    }, {});
+    const results = await api.jplaceholder.users.getUsers();
+    const response = normalize(results, schemas.userListSchema);
 
-    dispatch(setUsers('jsonplaceholder', users));
+    dispatch(setUsers('jplaceholder', response));
 
-    return users;
+    return response.entities.users;
   };
 }
 
 export function searchUsers(term) {
   return async dispatch => {
-    const response = await api.soundcloud.users.searchUsers(term);
+    const results = await api.soundcloud.users.searchUsers(term);
 
-    const users = response.reduce((obj, user) => {
-      return {
-        ...obj,
-        [user.id]: user,
-      };
-    }, {});
+    const response = normalize(results, schemas.userListSchema);
 
-    dispatch(setUsers('soundcloud', users));
+    dispatch(setUsers('soundcloud', response));
 
-    return users;
+    return response.entities.users;
   };
 }

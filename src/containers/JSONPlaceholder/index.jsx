@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import UserList from './../../modules/users/components/UserList';
+
 import users from './../../modules/users';
 
 class JSONPlaceholder extends Component {
@@ -11,7 +13,18 @@ class JSONPlaceholder extends Component {
   }
 
   componentDidMount() {
+    if (this.props.items.length === 0) {
+      this.fetchData();
+    }
+
     this.setState({ loading: false });
+  }
+
+  async fetchData() {
+    const { fetchUsers } = this.props;
+
+    this.setState({ loading: true });
+    await fetchUsers();
   }
 
   render() {
@@ -21,14 +34,21 @@ class JSONPlaceholder extends Component {
 
     return (
       <div className="JPlaceholder container">
-        <h1 className="title">Users</h1>
+        <h1 className="title">JSONPlaceholder Users</h1>
+        <UserList items={this.props.items} />
       </div>
     );
   }
 }
 
-export default connect(null, {
-  fetchSingle: users.actions.fetchSingle,
+function mapStateToProps(state) {
+  const ids = state.users.byType['jplaceholder'];
+
+  return {
+    items: ids.map(id => state.users.entities[id]),
+  };
+}
+
+export default connect(mapStateToProps, {
   fetchUsers: users.actions.fetchUsers,
-  searchUsers: users.actions.searchUsers,
 })(JSONPlaceholder);

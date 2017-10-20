@@ -1,0 +1,12 @@
+.User {
+  border: 1px solid black;
+  padding: 0.5em;
+}
+
+.User:not(:last-child) {
+  margin-bottom: 1em;
+}
+
+.User-name {
+  margin-bottom: 0.5em;
+}

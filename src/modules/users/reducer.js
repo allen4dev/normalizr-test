@@ -13,15 +13,10 @@ const INITIAL_STATE = {
 function entitiesReducer(state = INITIAL_STATE.entities, action = {}) {
   switch (action.type) {
     case actionTypes.SET_USERS:
-      return {
-        ...state,
-        ...action.payload.users,
-      };
-
     case actionTypes.SET_USER:
       return {
         ...state,
-        [action.payload.user.id]: action.payload.user,
+        ...action.payload.response.entities.users,
       };
 
     default:
@@ -29,49 +24,28 @@ function entitiesReducer(state = INITIAL_STATE.entities, action = {}) {
   }
 }
 
-function jplaceholderReducer(
-  state = INITIAL_STATE.byType.jplaceholder,
-  action = {}
-) {
-  if (!action.payload || action.payload.filter !== 'jsonplaceholder') {
-    return state;
-  }
+function createList(filter) {
+  return function(state = INITIAL_STATE.byType[filter], action = {}) {
+    if (!action.payload || action.payload.filter !== filter) {
+      return state;
+    }
 
-  switch (action.type) {
-    case actionTypes.SET_USERS:
-      return [...state, ...Object.keys(action.payload.users)];
+    switch (action.type) {
+      case actionTypes.SET_USERS:
+        return [...state, ...action.payload.response.result];
 
-    case actionTypes.SET_USER:
-      return [...state, action.payload.user.id];
+      case actionTypes.SET_USER:
+        return [...state, action.payload.response.result];
 
-    default:
-      state;
-  }
-}
-
-function soundcloudReducer(
-  state = INITIAL_STATE.byType.soundcloud,
-  action = {}
-) {
-  if (!action.payload || action.payload.filter !== 'soundcloud') {
-    return state;
-  }
-
-  switch (action.type) {
-    case actionTypes.SET_USERS:
-      return [...state, ...Object.keys(action.payload.users)];
-
-    case actionTypes.SET_USER:
-      return [...state, action.payload.id];
-
-    default:
-      state;
-  }
+      default:
+        return state;
+    }
+  };
 }
 
 const byTypeReducer = combineReducers({
-  jplaceholder: jplaceholderReducer,
-  soundcloud: soundcloudReducer,
+  jplaceholder: createList('jplaceholder'),
+  soundcloud: createList('soundcloud'),
 });
 
 const reducer = combineReducers({
